@@ -3,6 +3,24 @@
 const mongoose = require('mongoose');
 const Product = mongoose.model('Product');
 
+exports.getBySlug = (req, res, next) => {
+    Product.findOne(
+        {
+            active: true,
+            slug: req.params.slug
+        }
+        , "title description price slug tags").
+    then(data => {
+        res.status(200).send(data);
+    }).
+    catch(e => {
+        res.status(400).send({
+            message: "Falha ao exibir produto.",
+            date: e
+        });
+    });
+};
+
 exports.get = (req, res, next) => {
     Product.find({active: true}, "title price slug").
     then(data => {
